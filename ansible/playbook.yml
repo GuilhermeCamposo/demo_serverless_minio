@@ -7,6 +7,11 @@
     demo_project_display_name: Camel K - Serverless
     insecure_skip_tls_verify: true
     delete_demo: false
+    #CRW Config
+    workshop_che_user_password: openshift
+    codeready_sso_admin_username: admin
+    codeready_sso_admin_password: admin
+    debug_enable: false
   tasks:
 
     - name: Define domain
@@ -39,8 +44,12 @@
 
     - name: Include Serverless role
       include_role:
-        name: serverless        
+        name: serverless
 
     - name: Include Camel K role
       include_role:
-        name: camel-k               
+        name: camel-k
+
+    # - name: Include Codeready role
+    #   include_role:
+    #     name: codeready
