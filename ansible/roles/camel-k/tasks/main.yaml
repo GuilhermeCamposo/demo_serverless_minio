@@ -1,0 +1,28 @@
+- name: Evaluate {{ demo_project }} Operator Group
+  k8s:
+    state: present
+    api_version: operators.coreos.com/v1
+    kind: OperatorGroup
+    definition:
+      metadata:
+        name: '{{ demo_project }}-operatorgroup'
+        namespace: '{{ demo_project }}'
+      spec:
+        targetNamespaces:
+        - '{{ demo_project }}'
+
+- name: Evaluate Serverless Subscription
+  k8s:
+    state: present
+    api_version: operators.coreos.com/v1alpha1
+    kind: Subscription
+    definition:
+      metadata:
+        name: red-hat-camel-k
+        namespace: '{{ demo_project }}'
+      spec:
+        channel: 1.6.x
+        installPlanApproval: Automatic
+        name: red-hat-camel-k
+        source: redhat-operators
+        sourceNamespace: openshift-marketplace

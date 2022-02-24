@@ -1,0 +1,46 @@
+- hosts: localhost
+  name: Install Camel K Demo
+  vars:
+    demo_delete: false
+    demo_project: camel-k-serverless
+    demo_project_description: Namespace used for Camel K Serverless Demo
+    demo_project_display_name: Camel K - Serverless
+    insecure_skip_tls_verify: true
+    delete_demo: false
+  tasks:
+
+    - name: Define domain
+      set_fact:
+        domain : "{{ server | regex_replace('https://api.') | regex_replace(':6443')   }}"
+
+    - name: login as super user with token on OpenShift 4
+      command: "oc login --token={{ token }}  --server={{ server }} --insecure-skip-tls-verify={{ insecure_skip_tls_verify }}"
+      when:
+       - token is defined
+       - server is defined
+      ignore_errors: no
+
+    - name: Evaluate {{ demo_project }} Namespace
+      when: not delete_demo
+      k8s:
+        state: present
+        kind: Project
+        api_version: project.openshift.io/v1
+        definition:
+          metadata:
+            name: "{{ demo_project }}"
+            annotations:
+              openshift.io/description: "{{ demo_project_description }}"
+              openshift.io/display-name: "{{ demo_project_display_name }}"
+
+    - name: Include Minio role
+      include_role:
+        name: minio
+
+    - name: Include Serverless role
+      include_role:
+        name: serverless        
+
+    - name: Include Camel K role
+      include_role:
+        name: camel-k               

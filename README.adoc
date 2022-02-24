@@ -1,0 +1,21 @@
+= Camel K Serveless Minio Integration Demo
+
+=== Installing the demo using Ansible
+
+    token=REPLACE_ME
+    server=REPLACE_ME
+
+    ansible-playbook -e token=${token} -e server=${server} playbook.yml
+
+
+=== Running the route
+
+    oc project camel-k-serverless
+
+    kamel run --property file:minio.properties MinioUploader.java
+
+=== Testing the application
+
+    ROUTE=$(oc get routes.serving.knative.dev minio-uploader  -o jsonpath='{.status.url}' -n camel-k-serverless)
+
+    curl --request POST $ROUTE --header 'Content-Type: text/plain' --data-raw 'This is the file content.'
