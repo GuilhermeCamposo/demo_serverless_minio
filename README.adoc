@@ -26,12 +26,20 @@ oc login
 oc project camel-k-serverless
 ----
 
-Then move to `camel-k` folder and run the integration:
+Then move to `camel-k` folder and run the integration. 
+
+With properties:
 
 ----
 kamel run --property file:minio.properties MinioUploader.java
 ----
 
+With configmaps:
+
+----
+oc create -f minio-config.yml -n camel-k-serverless
+kamel run --config configmap:minio-config MinioUploader.java
+----
 
 == Testing the Integration
 

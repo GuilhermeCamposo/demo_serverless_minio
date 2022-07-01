@@ -1,0 +1,9 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: minio-config
+data:
+  s3.access-key: minio
+  s3.region: us-west-rack2
+  s3.secret-key: minio123
+  s3.url: 'http://minio:9000'
