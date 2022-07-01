@@ -1,33 +1,27 @@
 - hosts: localhost
   name: Install Camel K Demo
   vars:
-    demo_delete: false
     demo_project: camel-k-serverless
     demo_project_description: Namespace used for Camel K Serverless Demo
     demo_project_display_name: Camel K - Serverless
-    insecure_skip_tls_verify: true
-    delete_demo: false
-    #CRW Config
-    workshop_che_user_password: openshift
-    codeready_sso_admin_username: admin
-    codeready_sso_admin_password: admin
-    debug_enable: false
+    verify_tls: false
   tasks:
+
+    - name: Check Required Parameters
+      fail: msg="This play requires 'server','token' and 'participants' to be defined"
+      when:
+        - server is not defined
+        - token is not defined
 
     - name: Define domain
       set_fact:
         domain : "{{ server | regex_replace('https://api.') | regex_replace(':6443')   }}"
 
-    - name: login as super user with token on OpenShift 4
-      command: "oc login --token={{ token }}  --server={{ server }} --insecure-skip-tls-verify={{ insecure_skip_tls_verify }}"
-      when:
-       - token is defined
-       - server is defined
-      ignore_errors: no
-
     - name: Evaluate {{ demo_project }} Namespace
-      when: not delete_demo
       k8s:
+        api_key: '{{ token }}'
+        host: '{{ server }}'
+        validate_certs: '{{ verify_tls }}'
         state: present
         kind: Project
         api_version: project.openshift.io/v1
@@ -49,7 +43,3 @@
     - name: Include Camel K role
       include_role:
         name: camel-k
-
-    # - name: Include Codeready role
-    #   include_role:
-    #     name: codeready

@@ -1,21 +1,44 @@
 = Camel K Serveless Minio Integration Demo
 
-=== Installing the demo using Ansible
+== Requirements
 
-    token=REPLACE_ME
-    server=REPLACE_ME
+* OpenShift Cluster
+* Camel K CLI - kamel
+* OpenShift CLI - oc
+* Ansible
+** Python's Kubernetes Module
 
-    ansible-playbook -e token=${token} -e server=${server} playbook.yml
+== Preparing the Environment Using Ansible
+
+You will need an user with permission to create a project and install operators on cluster level.
+Export the user's `token` and the `server` API address as environment variables, then run the following command under the `ansible` folder:
+
+----
+ansible-playbook -e token=${token} -e server=${server} playbook.yml
+----
+
+== Running the Integration
+
+Before using `kamel` CLI make sure your are connected to the right namespace.
+
+----
+oc login
+oc project camel-k-serverless
+----
+
+Then move to `camel-k` folder and run the integration:
+
+----
+kamel run --property file:minio.properties MinioUploader.java
+----
 
 
-=== Running the route
+== Testing the Integration
 
-    oc project camel-k-serverless
+You may test your deployment using cURL:
 
-    kamel run --property file:minio.properties MinioUploader.java
+----
+ROUTE=$(oc get routes.serving.knative.dev minio-uploader  -o jsonpath='{.status.url}' -n camel-k-serverless)
 
-=== Testing the application
-
-    ROUTE=$(oc get routes.serving.knative.dev minio-uploader  -o jsonpath='{.status.url}' -n camel-k-serverless)
-
-    curl --request POST $ROUTE --header 'Content-Type: text/plain' --data-raw 'This is the file content.'
+curl --request POST $ROUTE --header 'Content-Type: text/plain' --data-raw 'This is the file content.'
+----
