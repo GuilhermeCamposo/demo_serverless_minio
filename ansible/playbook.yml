@@ -44,6 +44,6 @@
       include_role:
         name: camel-k
 
-    - name: Include Karavan Role
-      include_role:
-        name: karavan
+    # - name: Include Karavan Role
+    #   include_role:
+    #     name: karavan
