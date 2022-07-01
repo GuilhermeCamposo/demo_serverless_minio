@@ -1,0 +1,8 @@
+- name: Evaluate Karavan
+  k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
+    state: present
+    namespace: '{{ demo_project }}'
+    resource_definition: "{{ lookup('file', 'karavan-template.yml') }}"
