@@ -1,0 +1,11 @@
+schemaVersion: 2.2.0
+metadata:
+  name: demo-serverless
+attributes:
+  .vscode/extensions.json: |
+    {
+      "recommendations": [
+        "redhat.vscode-rhoas",
+        "redhat.vscode-camelk"
+      ]
+    }
