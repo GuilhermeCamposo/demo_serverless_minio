@@ -5,15 +5,33 @@
 * OpenShift Cluster
 * Camel K CLI - kamel
 * OpenShift CLI - oc
-* Ansible
-** Python's Kubernetes Module
+
+=== Ansible Automation
+
+* https://www.ansible.com/[Ansible 3]
+- https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#control-node-requirements[Ansible's requirement]
+* https://pypi.org/project/kubernetes/[Python's Kubernetes module]
 
 == Preparing the Environment Using Ansible
+
+=== Parameters
+
+[options="header"]
+|=======================
+| Parameter    | Example Value                                      | Definition
+| token        | sha256~vFanQbthlPKfsaldJT3bdLXIyEkd7ypO_XPygY1DNtQ | access token for a user with cluster-admin privileges
+| server       | https://api.${domain}.com:6443                     | Cluster API URL.
+|=======================
+
+=== Running the playbook
+
 
 You will need an user with permission to create a project and install operators on cluster level.
 Export the user's `token` and the `server` API address as environment variables, then run the following command under the `ansible` folder:
 
 ----
+cd ansible/
+
 ansible-playbook -e token=${token} -e server=${server} playbook.yml
 ----
 
@@ -26,7 +44,7 @@ oc login
 oc project camel-k-serverless
 ----
 
-Then move to `camel-k` folder and run the integration. 
+Then move to `camel-k` folder and run the integration.
 
 With properties:
 
