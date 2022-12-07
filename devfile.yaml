@@ -16,8 +16,8 @@ attributes:
 projects:
   - name: demo-serverless
     git:
-      remotes: 
-       - demo-serverless: 'https://github.com/GuilhermeCamposo/demo_serverless_minio.git'
+      remotes:
+        origin: 'https://github.com/GuilhermeCamposo/demo_serverless_minio.git'
 components:
   - attributes:
       che-code.eclipse.org/contribute-cpuLimit: true
